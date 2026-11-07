@@ -1,0 +1,6 @@
+{
+  "name": "iPhone 13 Mini Wireframe App",
+  "description": "Applicazione mobile wireframe a due pagine in formato iPhone 13 mini con navigazione interattiva Avanti e Indietro in bianco e nero.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
