@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +9,540 @@
     <meta property="og:description" content="Applicazione mobile wireframe a due pagine in formato iPhone 13 mini con navigazione interattiva Avanti e Indietro in bianco e nero." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tailwind CSS (CDN per compatibilità immediata statica su GitHub Pages) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Wireframe & Monospace Blueprint -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: #f4f4f5;
+        color: #09090b;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .font-mono-spec {
+        font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      /* Reticoli Wireframe Blueprint */
+      .wireframe-grid-canvas {
+        background-size: 24px 24px;
+        background-image: 
+          linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+      }
+
+      .wireframe-grid-phone {
+        background-size: 16px 16px;
+        background-image: 
+          linear-gradient(to right, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+      }
+
+      .wireframe-dots-phone {
+        background-image: radial-gradient(rgba(0, 0, 0, 0.20) 1px, transparent 1px);
+        background-size: 14px 14px;
+      }
+
+      /* Transizioni di pagina slide stile iOS */
+      .page-view {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+      }
+
+      .page-hidden-left {
+        transform: translateX(-100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .page-hidden-right {
+        transform: translateX(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .page-active {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Pulsante Wireframe Bianco e Nero */
+      .wireframe-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem 2rem;
+        min-height: 56px;
+        min-width: 210px;
+        font-family: 'Space Mono', monospace;
+        font-size: 1.125rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        background-color: #ffffff;
+        color: #000000;
+        border: 2px solid #000000;
+        box-shadow: 4px 4px 0px 0px #000000;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.15s ease;
+        outline: none;
+      }
+
+      .wireframe-btn:hover {
+        background-color: #000000;
+        color: #ffffff;
+        box-shadow: 2px 2px 0px 0px #000000;
+        transform: translate(2px, 2px);
+      }
+
+      .wireframe-btn:active {
+        box-shadow: none;
+        transform: translate(4px, 4px);
+      }
+
+      .wireframe-btn:focus-visible {
+        outline: 2px dashed #000000;
+        outline-offset: 4px;
+      }
+
+      /* Mirini d'angolo da drafting su bottone */
+      .crosshair {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        font-size: 10px;
+        line-height: 1;
+        opacity: 0.45;
+        pointer-events: none;
+      }
+      .ch-tl { top: -2px; left: -2px; }
+      .ch-tr { top: -2px; right: -2px; }
+      .ch-bl { bottom: -2px; left: -2px; }
+      .ch-br { bottom: -2px; right: -2px; }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="min-h-screen flex flex-col bg-neutral-100 wireframe-grid-canvas text-black">
+
+    <!-- BARRA SUPERIORE / WORKSPACE TOOLBAR -->
+    <header class="w-full bg-white border-b-2 border-black sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Logo e Titolo Progetto -->
+        <div class="flex items-center gap-3">
+          <div class="w-6 h-6 border-2 border-black flex items-center justify-center font-mono-spec font-bold text-xs bg-black text-white">
+            W
+          </div>
+          <div>
+            <h1 class="font-mono-spec font-bold text-xs sm:text-sm tracking-tight text-black flex items-center gap-2">
+              <span>WIRE_PROTOTYPE</span>
+              <span class="text-neutral-400">/</span>
+              <span class="text-[11px] bg-neutral-100 border border-neutral-300 px-1.5 py-0.5 rounded text-neutral-800">
+                iPhone 13 mini (375×812)
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        <!-- Selettore / Indicatore Schermata Attiva -->
+        <div class="flex items-center gap-1 bg-neutral-100 border-2 border-black p-1">
+          <button
+            id="tab-page-1"
+            onclick="goToPage(1)"
+            class="px-3 py-1 text-xs font-mono-spec font-bold transition-all bg-black text-white flex items-center gap-1"
+          >
+            <span>PAGINA 1</span>
+            <span class="text-[10px] opacity-75">(avanti)</span>
+          </button>
+          <span class="text-neutral-400 font-mono-spec px-1 text-xs">↔</span>
+          <button
+            id="tab-page-2"
+            onclick="goToPage(2)"
+            class="px-3 py-1 text-xs font-mono-spec font-bold transition-all text-neutral-700 hover:text-black flex items-center gap-1"
+          >
+            <span>PAGINA 2</span>
+            <span class="text-[10px] opacity-75">(indietro)</span>
+          </button>
+        </div>
+
+        <!-- Comandi Rapidi Prototype -->
+        <div class="flex items-center gap-2">
+          <!-- Toggle Reticolo Griglia -->
+          <button
+            id="btn-toggle-grid"
+            onclick="cycleGridStyle()"
+            title="Cambia stile sfondo wireframe"
+            class="px-2.5 py-1 border border-black text-xs font-mono-spec bg-white hover:bg-neutral-100"
+          >
+            GRIGLIA: <span id="label-grid-style" class="font-bold">Reticolo</span>
+          </button>
+
+          <!-- Toggle Quote Tecniche -->
+          <button
+            id="btn-toggle-specs"
+            onclick="toggleSpecs()"
+            title="Mostra / Nascondi quote dimensionali"
+            class="px-2.5 py-1 border border-black text-xs font-mono-spec bg-black text-white"
+          >
+            QUOTE
+          </button>
+
+          <!-- Toggle Audio Feedback -->
+          <button
+            id="btn-toggle-sound"
+            onclick="toggleSound()"
+            title="Attiva/disattiva suono click"
+            class="px-2 py-1 border border-black text-xs font-mono-spec bg-white hover:bg-neutral-100"
+          >
+            SUONO: <span id="label-sound-state" class="font-bold">ON</span>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- AREA DRAFTING PRINCIPALE CON IPHONE 13 MINI -->
+    <main class="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 overflow-hidden relative">
+      
+      <!-- Label Progetto Tecnico -->
+      <div class="mb-3 text-center select-none">
+        <span id="canvas-subtitle" class="text-[11px] font-mono-spec uppercase tracking-widest text-neutral-500 font-semibold">
+          PROGETTO WIREFRAME • SCHERMO 1 DI 2
+        </span>
+      </div>
+
+      <!-- Scaler Responsive Wrapper -->
+      <div id="device-scaler" class="relative flex items-center justify-center transition-transform duration-200">
+        
+        <!-- Quote Tecniche Sovrapposte (375x812 pt) -->
+        <div id="specs-overlay">
+          <!-- Quota Larghezza Superiore -->
+          <div class="absolute -top-9 left-0 right-0 flex items-center justify-between text-[11px] font-mono-spec font-bold text-black border-b border-black pb-1">
+            <span>|</span>
+            <span class="bg-white px-2 tracking-wider">375 pt (iPhone 13 mini)</span>
+            <span>|</span>
+          </div>
+
+          <!-- Quota Altezza Destra -->
+          <div class="absolute -right-16 top-0 bottom-0 flex flex-col items-center justify-between text-[11px] font-mono-spec font-bold text-black border-l border-black pl-1.5 py-2">
+            <span>—</span>
+            <span class="bg-white py-2 rotate-90 whitespace-nowrap tracking-wider">812 pt</span>
+            <span>—</span>
+          </div>
+
+          <!-- Spec Raggi e Display -->
+          <div class="absolute -bottom-7 left-0 text-[10px] font-mono-spec text-neutral-600">
+            r: 44pt (Bezel) / 40pt (Screen)
+          </div>
+          <div class="absolute -bottom-7 right-0 text-[10px] font-mono-spec text-neutral-600 text-right">
+            5.4" • 19.5:9 RATIO
+          </div>
+        </div>
+
+        <!-- Tasti Fisici Hardware Esterni Chassis -->
+        <div class="absolute -left-[5px] top-[108px] w-[5px] h-[26px] bg-black rounded-l-[2px]" title="Silent Switch"></div>
+        <div class="absolute -left-[5px] top-[152px] w-[5px] h-[48px] bg-black rounded-l-[2px]" title="Volume Up"></div>
+        <div class="absolute -left-[5px] top-[214px] w-[5px] h-[48px] bg-black rounded-l-[2px]" title="Volume Down"></div>
+        <div class="absolute -right-[5px] top-[168px] w-[5px] h-[68px] bg-black rounded-r-[2px]" title="Power / Lock"></div>
+
+        <!-- Chassis Esterno iPhone 13 mini -->
+        <div
+          class="relative bg-white border-[3px] border-black rounded-[50px] p-[10px] shadow-[0_20px_50px_rgba(0,0,0,0.12),0_4px_12px_rgba(0,0,0,0.08)]"
+          style="width: 395px; height: 832px;"
+        >
+          <!-- Display Schermo (371 × 808 px viewport) -->
+          <div
+            id="phone-screen"
+            class="relative w-[371px] h-[808px] rounded-[40px] overflow-hidden flex flex-col bg-white border border-black/30 wireframe-grid-phone"
+          >
+            
+            <!-- Notch iPhone 13 mini (154px × 28px) -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 z-30 w-[154px] h-[28px] bg-black rounded-b-[18px] flex items-center justify-center px-4">
+              <!-- Capsula Auricolare -->
+              <div class="w-12 h-1 bg-neutral-800 rounded-full"></div>
+              <!-- Fotocamera Frontale -->
+              <div class="absolute right-6 w-2.5 h-2.5 rounded-full border border-neutral-700 bg-neutral-900"></div>
+            </div>
+
+            <!-- Barra di Stato iOS Wireframe -->
+            <div class="relative z-20 w-full h-[44px] px-7 pt-3 flex items-center justify-between text-black text-xs font-mono-spec select-none">
+              <span class="font-bold tracking-tight text-[13px]">9:41</span>
+              <div class="flex items-center gap-2">
+                <!-- Segnale Rete a 4 barre -->
+                <div class="flex items-end gap-[1.5px] h-3" title="Segnale">
+                  <div class="w-[2.5px] h-[4px] bg-black"></div>
+                  <div class="w-[2.5px] h-[6px] bg-black"></div>
+                  <div class="w-[2.5px] h-[9px] bg-black"></div>
+                  <div class="w-[2.5px] h-[12px] bg-black"></div>
+                </div>
+                <!-- Wi-Fi Wireframe SVG -->
+                <svg class="w-3.5 h-3.5 stroke-black fill-none stroke-[2.2]" viewBox="0 0 24 24">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                  <line x1="12" y1="20" x2="12.01" y2="20"/>
+                </svg>
+                <!-- Batteria Wireframe -->
+                <div class="flex items-center" title="Batteria: 100%">
+                  <div class="w-[22px] h-[11px] border-[1.5px] border-black rounded-[3px] p-[1.5px] flex items-center">
+                    <div class="w-full h-full bg-black rounded-[1px]"></div>
+                  </div>
+                  <div class="w-[1.5px] h-[4px] bg-black rounded-r-[1px]"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AREA CONTENUTO SCHERMATE (VUOTE CON UN SOLO PULSANTE) -->
+            <div class="relative flex-1 w-full overflow-hidden">
+              
+              <!-- ============================================== -->
+              <!-- PAGINA 1: con dentro SOLO un bottone con scritto “avanti” -->
+              <!-- ============================================== -->
+              <div id="page-1" class="page-view page-active">
+                <button
+                  id="btn-avanti"
+                  type="button"
+                  class="wireframe-btn"
+                  onclick="goToPage(2)"
+                  aria-label="avanti"
+                >
+                  <span class="crosshair ch-tl">+</span>
+                  <span class="crosshair ch-tr">+</span>
+                  <span class="crosshair ch-bl">+</span>
+                  <span class="crosshair ch-br">+</span>
+                  
+                  <span>avanti</span>
+                  
+                  <!-- Freccia direzionale destra -->
+                  <svg class="w-5 h-5 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- ============================================== -->
+              <!-- PAGINA 2: con dentro SOLO un bottone con scritto “indietro” -->
+              <!-- ============================================== -->
+              <div id="page-2" class="page-view page-hidden-right">
+                <button
+                  id="btn-indietro"
+                  type="button"
+                  class="wireframe-btn"
+                  onclick="goToPage(1)"
+                  aria-label="indietro"
+                >
+                  <span class="crosshair ch-tl">+</span>
+                  <span class="crosshair ch-tr">+</span>
+                  <span class="crosshair ch-bl">+</span>
+                  <span class="crosshair ch-br">+</span>
+                  
+                  <!-- Freccia direzionale sinistra -->
+                  <svg class="w-5 h-5 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+                    <line x1="19" y1="12" x2="5" y2="12"/>
+                    <polyline points="12 19 5 12 12 5"/>
+                  </svg>
+
+                  <span>indietro</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Indicatore Home Bar iOS -->
+            <div class="relative z-20 w-full pb-2.5 pt-1 flex justify-center pointer-events-none">
+              <div class="w-32 h-[4.5px] bg-black rounded-full"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Istruzioni Scorciatoie / Guida Rapida -->
+      <footer class="mt-4 text-center select-none z-10">
+        <p class="text-[11px] font-mono-spec text-neutral-600 tracking-tight">
+          Premi <span id="footer-action-label" class="font-bold underline cursor-pointer" onclick="toggleCurrentPage()">“avanti”</span> per passare a <span id="footer-target-page">Pagina 2</span>
+          • Tasti: <kbd class="px-1 py-0.5 bg-white border border-neutral-300 rounded text-[10px]">←</kbd> <kbd class="px-1 py-0.5 bg-white border border-neutral-300 rounded text-[10px]">→</kbd> <kbd class="px-1 py-0.5 bg-white border border-neutral-300 rounded text-[10px]">Spazio</kbd>
+        </p>
+      </footer>
+
+    </main>
+
+    <!-- LOGICA JAVASCRIPT VANILLA STATICA (NESSUN FRAMEWORK, NESSUN MODULO ESTERNO) -->
+    <script>
+      // STATO APPLICAZIONE
+      let currentPage = 1;
+      let soundEnabled = true;
+      let showSpecs = true;
+      let gridIndex = 0;
+      const gridStyles = ['grid', 'dots', 'clean'];
+      const gridLabels = ['Reticolo', 'Punti', 'Bianco'];
+
+      // Elementi DOM
+      const page1 = document.getElementById('page-1');
+      const page2 = document.getElementById('page-2');
+      const tab1 = document.getElementById('tab-page-1');
+      const tab2 = document.getElementById('tab-page-2');
+      const subtitle = document.getElementById('canvas-subtitle');
+      const footerAction = document.getElementById('footer-action-label');
+      const footerTarget = document.getElementById('footer-target-page');
+      const phoneScreen = document.getElementById('phone-screen');
+      const specsOverlay = document.getElementById('specs-overlay');
+      const labelGridStyle = document.getElementById('label-grid-style');
+      const labelSoundState = document.getElementById('label-sound-state');
+      const btnToggleSpecs = document.getElementById('btn-toggle-specs');
+      const deviceScaler = document.getElementById('device-scaler');
+
+      // Feedback Audio Web Audio API (senza file esterni)
+      let audioCtx = null;
+      function playClickSound() {
+        if (!soundEnabled) return;
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+          if (!audioCtx) audioCtx = new AudioContextClass();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.04);
+
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.04);
+        } catch (e) {
+          // Ignora se non supportato
+        }
+      }
+
+      // Funzione di Navigazione tra Pagina 1 e Pagina 2
+      function goToPage(page) {
+        if (page === currentPage) return;
+        playClickSound();
+
+        if (page === 2) {
+          // Da Pagina 1 a Pagina 2: slide verso sinistra
+          page1.className = 'page-view page-hidden-left';
+          page2.className = 'page-view page-active';
+          currentPage = 2;
+
+          // Aggiorna indicatori UI
+          tab1.className = 'px-3 py-1 text-xs font-mono-spec font-bold transition-all text-neutral-700 hover:text-black flex items-center gap-1';
+          tab2.className = 'px-3 py-1 text-xs font-mono-spec font-bold transition-all bg-black text-white flex items-center gap-1';
+          subtitle.textContent = 'PROGETTO WIREFRAME • SCHERMO 2 DI 2';
+          footerAction.textContent = '“indietro”';
+          footerTarget.textContent = 'Pagina 1';
+        } else {
+          // Da Pagina 2 a Pagina 1: slide verso destra
+          page2.className = 'page-view page-hidden-right';
+          page1.className = 'page-view page-active';
+          currentPage = 1;
+
+          // Aggiorna indicatori UI
+          tab1.className = 'px-3 py-1 text-xs font-mono-spec font-bold transition-all bg-black text-white flex items-center gap-1';
+          tab2.className = 'px-3 py-1 text-xs font-mono-spec font-bold transition-all text-neutral-700 hover:text-black flex items-center gap-1';
+          subtitle.textContent = 'PROGETTO WIREFRAME • SCHERMO 1 DI 2';
+          footerAction.textContent = '“avanti”';
+          footerTarget.textContent = 'Pagina 2';
+        }
+      }
+
+      function toggleCurrentPage() {
+        goToPage(currentPage === 1 ? 2 : 1);
+      }
+
+      // Ciclo Stili Griglia
+      function cycleGridStyle() {
+        gridIndex = (gridIndex + 1) % gridStyles.length;
+        const currentStyle = gridStyles[gridIndex];
+        labelGridStyle.textContent = gridLabels[gridIndex];
+
+        phoneScreen.classList.remove('wireframe-grid-phone', 'wireframe-dots-phone');
+        if (currentStyle === 'grid') {
+          phoneScreen.classList.add('wireframe-grid-phone');
+        } else if (currentStyle === 'dots') {
+          phoneScreen.classList.add('wireframe-dots-phone');
+        }
+        playClickSound();
+      }
+
+      // Toggle Quote Dimensionali
+      function toggleSpecs() {
+        showSpecs = !showSpecs;
+        specsOverlay.style.display = showSpecs ? 'block' : 'none';
+        btnToggleSpecs.className = showSpecs
+          ? 'px-2.5 py-1 border border-black text-xs font-mono-spec bg-black text-white'
+          : 'px-2.5 py-1 border border-black text-xs font-mono-spec bg-white text-black hover:bg-neutral-100';
+        playClickSound();
+      }
+
+      // Toggle Suono
+      function toggleSound() {
+        soundEnabled = !soundEnabled;
+        labelSoundState.textContent = soundEnabled ? 'ON' : 'OFF';
+        if (soundEnabled) playClickSound();
+      }
+
+      // Responsive Scaler per adattarsi allo schermo del browser
+      function updateDeviceScale() {
+        const availableHeight = window.innerHeight - 110;
+        const deviceHeight = 840;
+        if (availableHeight < deviceHeight) {
+          const scale = Math.max(0.55, Math.min(1, (availableHeight - 20) / deviceHeight));
+          deviceScaler.style.transform = 'scale(' + scale.toFixed(2) + ')';
+          deviceScaler.style.transformOrigin = 'top center';
+        } else {
+          deviceScaler.style.transform = 'scale(0.92)';
+          deviceScaler.style.transformOrigin = 'top center';
+        }
+      }
+
+      window.addEventListener('resize', updateDeviceScale);
+      updateDeviceScale();
+
+      // Scorciatoie da Tastiera
+      window.addEventListener('keydown', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 'ArrowRight' || e.key === 'Enter') {
+          if (currentPage === 1) goToPage(2);
+        } else if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+          if (currentPage === 2) goToPage(1);
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          toggleCurrentPage();
+        }
+      });
+    </script>
   </body>
 </html>
-
